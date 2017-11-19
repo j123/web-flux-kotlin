@@ -12,11 +12,13 @@ class Router(private val demoHandler: DemoHandler, private val userHandler: User
 
     @Bean
     fun apiRouter() = router {
-        (accept(APPLICATION_JSON_UTF8)).nest {
+        accept(APPLICATION_JSON_UTF8).nest {
             GET("/", demoHandler::getDemo)
-            GET("/user", userHandler::findAll)
+            GET("/users", userHandler::findAll)
+
         }
-
+        accept(TEXT_EVENT_STREAM).nest {
+            GET("/users", userHandler::streamOneSec)
+        }
     }
-
 }
